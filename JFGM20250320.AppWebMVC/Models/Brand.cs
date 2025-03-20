@@ -13,6 +13,7 @@ public partial class Brand
     public string BrandName { get; set; } = null!;
 
     [Display(Name = "Pais de origen de la marca")]
+    [Required(ErrorMessage = "Es obligatorio el nombre el pais")]
     public string? Country { get; set; }
 
     public virtual ICollection<Product> Products { get; set; } = new List<Product>();
