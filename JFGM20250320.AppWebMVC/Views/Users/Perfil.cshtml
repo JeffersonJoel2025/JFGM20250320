@@ -1,17 +1,18 @@
 ﻿@model JFGM20250320.AppWebMVC.Models.User
 
 @{
-    ViewData["Title"] = "Edit";
+	ViewData["Title"] = "Perfil";
 }
+
 
 <div class="card">
 
 	<div class="card-header">
-		<h1 class="text-center">Editar Usuario</h1>
+		<h1 class="text-center">Perfil</h1>
 	</div>
 
 	<div class="card-body">
-		<form asp-action="Edit">
+		<form asp-action="Perfil">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input type="hidden" asp-for="UserId" />
 
@@ -34,7 +35,15 @@
 			</div>
 
 			<div class="row">
-				<div class="col-12">
+				<div class="col-6">
+					<div class="form-group">
+						<label asp-for="paswordConfir" class="control-label"></label>
+						<input asp-for="paswordConfir" class="form-control" />
+						<span asp-validation-for="paswordConfir" class="text-danger"></span>
+					</div>
+				</div>
+
+				<div class="col-6">
 					<div class="form-group">
 						<label asp-for="Role" class="control-label"></label>
 						<select asp-for="Role" class="form-control">
@@ -48,21 +57,14 @@
 				</div>
 			</div>
 
-
 			<br />
 			<div class="card-footer">
-				<button type="submit" value="Save" class="btn btn-outline-success">Actualizar</button> |
-				<a class="btn btn-outline-secondary" asp-action="Index">Regresar</a>
+				<button type="submit" class="btn btn-outline-success">Actualizar</button>
 			</div>
-
 
 		</form>
 
-
 	</div>
-
-
-
 
 </div>
 
@@ -71,3 +73,5 @@
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
 }
+
+
