@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JFGM20250320.AppWebMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using JFGM20250320.AppWebMVC.Models;
+using Microsoft.AspNetCore.Authorization;
 
-
-namespace Prueba19Definitiva.Controllers
+namespace JFGM20250320.AppWebMVC.Controllers
 {
+
+    [Authorize]
     public class ProductsController : Controller
     {
         private readonly Test20250320DbContext _context;
@@ -19,34 +21,38 @@ namespace Prueba19Definitiva.Controllers
             _context = context;
         }
 
-
-        public async Task<IActionResult> Index(Product product, int topRegis = 10)
+        // GET: Products
+        public async Task<IActionResult> Index(Product producto)
         {
+
             var query = _context.Products.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(product.ProductName))
-                query = query.Where(s => s.ProductName.Contains(product.ProductName));
-            if (!string.IsNullOrWhiteSpace(product.Description))
-                query = query.Where(s => s.Description.Contains(product.Description));
-            if (product.BrandId > 0)
-                query = query.Where(s => s.BrandId == product.BrandId);
-            if (product.WarehouseId > 0)
-                query = query.Where(s => s.WarehouseId == product.WarehouseId);
-            if (topRegis > 0)
-                query = query.Take(topRegis);
+
+            if (!string.IsNullOrWhiteSpace(producto.ProductName))
+                query = query.Where(s => s.ProductName.Contains(producto.ProductName));
+
+            if (producto.BrandId > 0)
+                query = query.Where(s => s.BrandId == producto.BrandId);
+
+            if (producto.WarehouseId > 0)
+                query = query.Where(s => s.WarehouseId == producto.WarehouseId);
+
+
             query = query
                 .Include(p => p.Warehouse).Include(p => p.Brand);
 
-            var brand = _context.Brands.ToList();
-            brand.Add(new Brand { BrandName = "SELECCIONAR", BrandId = 0 });
-            var categorie = _context.Warehouses.ToList();
-            categorie.Add(new Warehouse { WarehouseName = "SELECCIONAR", WarehouseId = 0 });
-            ViewData["WarehouseId"] = new SelectList(categorie, "WarehouseId", "WarehouseName", 0);
-            ViewData["BrandId"] = new SelectList(brand, "BrandId", "BrandName", 0);
+            var marcas = _context.Brands.ToList();
+            marcas.Add(new Brand { BrandName = "SELECCIONAR", BrandId = 0 });
+
+            var bodegas = _context.Warehouses.ToList();
+            bodegas.Add(new Warehouse { WarehouseName = "SELECCIONAR", WarehouseId = 0 });
+
+            ViewData["WarehouseId"] = new SelectList(bodegas, "WarehouseId", "WarehouseName", 0);
+            ViewData["BrandId"] = new SelectList(marcas, "BrandId", "BrandName", 0);
 
             return View(await query.ToListAsync());
         }
 
-
+        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -66,14 +72,17 @@ namespace Prueba19Definitiva.Controllers
             return View(product);
         }
 
+        // GET: Products/Create
         public IActionResult Create()
         {
             ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName");
-            ViewData["CategoryId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseName");
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Notes");
             return View();
         }
 
-
+        // POST: Products/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ProductId,ProductName,Description,Price,WarehouseId,BrandId")] Product product)
@@ -84,12 +93,12 @@ namespace Prueba19Definitiva.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", product.BrandId);
-            ViewData["CategoryId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseId", product.WarehouseId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Notes", product.WarehouseId);
             return View(product);
         }
 
-
+        // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -103,11 +112,13 @@ namespace Prueba19Definitiva.Controllers
                 return NotFound();
             }
             ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseName", product.WarehouseId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Notes", product.WarehouseId);
             return View(product);
         }
 
-
+        // POST: Products/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ProductId,ProductName,Description,Price,WarehouseId,BrandId")] Product product)
@@ -137,11 +148,12 @@ namespace Prueba19Definitiva.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandId", product.BrandId);
-            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "WarehouseId", product.WarehouseId);
+            ViewData["BrandId"] = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
+            ViewData["WarehouseId"] = new SelectList(_context.Warehouses, "WarehouseId", "Notes", product.WarehouseId);
             return View(product);
         }
 
+        // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -161,7 +173,7 @@ namespace Prueba19Definitiva.Controllers
             return View(product);
         }
 
-
+        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -9,11 +9,11 @@ public partial class Product
     public int ProductId { get; set; }
 
     
-    [Display(Name = "Nombre del usuario")]
+    [Display(Name = "Nombre")]
     [Required(ErrorMessage = "El nombre es obligatorio")]
     public string ProductName { get; set; } = null!;
 
-    [Display(Name = "Nombre del usuario")]
+    [Display(Name = "Descripcion")]
     [Required(ErrorMessage = "La descripcion es obligatorio")]
     public string? Description { get; set; }
 
@@ -25,10 +25,8 @@ public partial class Product
     public int? BrandId { get; set; }
 
     [Display(Name = "Marca")]
-    [Required(ErrorMessage = "El marca es obligatorio")]
     public virtual Brand? Brand { get; set; }
 
     [Display(Name = "Bodega")]
-    [Required(ErrorMessage = "El bodega es obligatorio")]
     public virtual Warehouse? Warehouse { get; set; }
 }

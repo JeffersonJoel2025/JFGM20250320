@@ -1,0 +1,35 @@
+﻿@model JFGM20250320.AppWebMVC.Models.Warehouse
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+<h1 class="text-center">Eliminar Bodega</h1>
+
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.WarehouseName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.WarehouseName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="WarehouseId" />
+        <button type="submit" value="Delete" class="btn btn-outline-danger">Eliminar</button> |
+        <a asp-action="Index" class="btn btn-outline-primary">Regresar</a>
+    </form>
+</div>
+
+

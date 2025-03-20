@@ -1,0 +1,51 @@
+﻿@model JFGM20250320.AppWebMVC.Models.Warehouse
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<div class="card">
+
+	<div class="card-header">
+		<h1 class="text-center">Editar Bodega</h1>
+	</div>
+	<form asp-action="Edit">
+		<div class="card-body">
+			<div class="row">
+
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<input type="hidden" asp-for="WarehouseId" />
+				<div class="col-6">
+
+					<div class="form-group">
+						<label asp-for="WarehouseName" class="control-label"></label>
+						<input asp-for="WarehouseName" class="form-control" />
+						<span asp-validation-for="WarehouseName" class="text-danger"></span>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="form-group">
+						<label asp-for="Notes" class="control-label"></label>
+						<input asp-for="Notes" class="form-control" />
+						<span asp-validation-for="Notes" class="text-danger"></span>
+					</div>
+				</div>
+
+
+				
+			</div>
+			<br />
+			<div class="card-footer">
+				<button type="submit" value="Save" class="btn btn-outline-success">Crear</button>
+				<a asp-action="Index" class="btn btn-outline-primary">Regresar</a>
+			</div>
+		</div>
+	</form>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

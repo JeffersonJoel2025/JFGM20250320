@@ -15,6 +15,9 @@ using System.Security.Claims;
 
 namespace JFGM20250320.AppWebMVC.Controllers
 {
+
+
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly Test20250320DbContext _context;
